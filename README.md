@@ -33,4 +33,4 @@ http://localhost:5555/<assets/scripts/stylesheets>/\<file\>.\[?\]
 
 You can look at `start-server.js` if you want to look for yourself.
 
-This program will only request data from (hypixel.net)[https://hypixel.net], (api.hypixel.net)[https://hypixel.net] and any links for forum avatars.
+This program will only request data from [hypixel.net](https://hypixel.net), [api.hypixel.net](https://hypixel.net) and any links for forum avatars.
