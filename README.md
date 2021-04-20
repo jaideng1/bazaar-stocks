@@ -16,7 +16,7 @@ Finally, run `npm start` to run the program.
 
 # Making your own
 
-Any JS scripts, CSS files,  for the app will be automatically hosted if they are in the right location.
+Any JS scripts, CSS files,  for the app will be automatically hosted if they are in the right folder.
 
 Put JS scripts in `/public/scripts`
 Put CSS scripts in `/public/stylesheets`
