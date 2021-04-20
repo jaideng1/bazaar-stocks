@@ -29,7 +29,7 @@ It's hosted at localhost:5555.
 You can change the port in `.env`, but you will have to replace all of the 5555 ports used in `index.html`
 
 To reference something, use:
-http://localhost:5555/<assets/scripts/stylesheets>/<file>.[?]
+http://localhost:5555/<assets/scripts/stylesheets>/\<file\>.\[?\]
 
 You can look at `start-server.js` if you want to look for yourself.
 
