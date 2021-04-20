@@ -1,6 +1,6 @@
 # bazaar-stocks
 
-A stocks application for the Bazaar.
+A stocks application for the Bazaar in Hypixel SkyBlock.
 
 There isn't an actual application yet, you have to run it using Node.js and Electron right now.
 
