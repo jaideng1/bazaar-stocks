@@ -10,6 +10,8 @@ Install [Node.js](https://nodejs.org/), and download this folder.
 
 Run `npm install` in this folder, then run `sudo npm install electron -g`.
 
+After, run `cat example-env.txt >> .env` to create the `.env` file.
+
 Put your Hypixel API key in `.env`.
 Finally, run `npm start` to run the program.
 
