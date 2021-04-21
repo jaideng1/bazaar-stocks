@@ -26,10 +26,11 @@
       </div>
     </div>
     <div>
-      <div class="scroll-news" id="stocks" style="height: 800px;">
+      <div class="scroll-news" id="stocks" style="height: 660px;">
         <div class="active-news">
           <p style="font-weight: normal;">Hypixel News</p>
           <p class="stock-desc">From hypixel.net</p>
+          <p class="mrkt-cap" id="mrkt-cap-title" style="background-color: #999999" onclick="switchMode()">--</p>
         </div>
       </div>
       <div class="scroll-info" id="info" style="height: 725px;">
@@ -46,10 +47,18 @@
       var backendData = null;
       var ipcRenderer = require("electron").ipcRenderer;
 
+      var storedFirstBackendData = false;
+
       ipcRenderer.on("data", (e, dt) => {
         backendData = dt;
         console.log("Recieved Keys.")
         onRecieveKeys(backendData);
+
+        if (!storedFirstBackendData) {
+          console.log("Recieved First Backend Data. Stored in `storage[" + storage.length + "]`");
+          storage.push(dt);
+          storedFirstBackendData = true;
+        }
       })
     </script>
     <script>

@@ -4,6 +4,21 @@ var formattedKeys = false;
 
 var stocksContainer = document.getElementById("stocks");
 
+function getAverageSellMovingWeek() {
+  let totalSMW = 0;
+  let totalAmount = productKeys.length;
+  productKeys.forEach((key) => {
+    let item = products[key];
+    if (item.quick_status.sellMovingWeek == 0) {
+      totalAmount--;
+    } else {
+      totalSMW += item.quick_status.sellMovingWeek;
+    }
+  });
+
+  return totalSMW / totalAmount;
+}
+
 //When the backend data shows up to the party
 function onRecieveKeys(beData) {
   if (formattedKeys) return;
@@ -11,8 +26,12 @@ function onRecieveKeys(beData) {
   productKeys = beData.productList;
   products = beData.products;
 
+  let avgSMW = getAverageSellMovingWeek();
+
   for (let key of productKeys) {
     let divEle = document.createElement("div");
+
+    divEle.onclick = () => { switchToInfo(key) }
 
     stocksContainer.appendChild(divEle);
 
@@ -22,7 +41,7 @@ function onRecieveKeys(beData) {
     let descEle = document.createElement("p");
     descEle.textContent = titleCase(key.replaceAll("_", " ").toLowerCase());
 
-    descEle.classList.add("stock-desc")
+    descEle.classList.add("stock-desc");
 
     // let canvasStats = document.createElement("canvas");
     //
@@ -43,7 +62,7 @@ function onRecieveKeys(beData) {
     mrktCap.classList.add("mrkt-cap");
     mrktCap.id = "mrkt-cap-" + key.toLowerCase();
     mrktCap.onclick = switchMode;
-    mrktCap.style = "background-color: " + ((Math.floor(Math.random() * 2) == 1) ? "#34eb46" : "#e03b22")
+    mrktCap.style = "background-color: " + ((products[key].quick_status.sellMovingWeek >= avgSMW) ? "#34eb46" : "#e03b22")
 
     divEle.appendChild(aEle)
     setTimeout(() => {
@@ -65,6 +84,12 @@ function onRecieveKeys(beData) {
   }, 100)
 }
 
+function switchToInfo(key) {
+  let product = products[key];
+
+  let quickStatus = product.quick_status;
+}
+
 function formatCanvas(canvas) {
   var ctx = canvas.getContext("2d");
   ctx.fillStyle = "#34eb46"; //For green
@@ -80,7 +105,7 @@ function adjustHeight() {
   if (window.innerHeight != lastHeight) {
     lastHeight = window.innerHeight;
     stocksContainer.style = "height: " + (lastHeight - 100) + "px";
-    infoContainer.style = "height: " + (lastHeight - 75) + "px";
+    infoContainer.style = "height: " + (lastHeight - 190) + "px";
   }
 }
 
@@ -116,9 +141,9 @@ function getInitials(str) {
 
 var mode = -1;
 //or something like thhs idk
-//0: Gain <- btw not gonna work, change this to the buy price.
+//0: Sell Moving Week, how many items sold were actually sold (over the last 7 days)
 //1: loop through, order amount * order price per unit, add up the sum - is this market cap? idk economics
-//2: How Many Orders
+//2: Buy Volume
 
 //changes the cool color buttons and displays fancy numbers
 function switchMode() {
@@ -126,18 +151,27 @@ function switchMode() {
 
   mode = (mode + 1) % 3;
 
+  document.getElementById("mrkt-cap-title").innerHTML = (mode == 0) ? "SMW" : ((mode == 1) ? "MC" : "Orders")
+  document.getElementById("mrkt-cap-title").title = (mode == 0) ? "Sell Moving Week" : ((mode == 1) ? "Market Cap" : "Buy Orders");
+
   switch (mode) {
     case 0:
       //Get the Gain
       for (let ele of infoEles) {
         let key = ele.id.replace("mrkt-cap-", "").toUpperCase();
-        ele.textContent = "N/A"
+        if (key == "TITLE") continue;
+
+        let quickStatus = products[key].quick_status;
+
+        ele.textContent = limitToMaxPriceLength(roundDown(quickStatus.sellMovingWeek), 4);
       }
       break;
     case 1:
       //Market Cap
       for (let ele of infoEles) {
         let key = ele.id.replace("mrkt-cap-", "").toUpperCase();
+        if (key == "TITLE") continue;
+
         let quickStatus = products[key].quick_status;
         let finalAmount = 0;
         for (let sellOrder of products[key].sell_summary) {
@@ -150,8 +184,10 @@ function switchMode() {
       //Get Market Data
       for (let ele of infoEles) {
         let key = ele.id.replace("mrkt-cap-", "").toUpperCase();
+        if (key == "TITLE") continue;
+
         let quickStatus = products[key].quick_status;
-        ele.innerHTML = limitToMaxPriceLength(roundDown(Math.round(quickStatus.sellVolume)), 4);
+        ele.innerHTML = limitToMaxPriceLength(roundDown(Math.round(quickStatus.buyVolume)), 4);
       }
 
   }

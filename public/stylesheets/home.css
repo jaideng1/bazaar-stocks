@@ -165,6 +165,15 @@ body > * {
   position: relative;
 }
 
+#mrkt-cap-title {
+  margin-right: 10px;
+  padding-right: 50px;
+
+  position: relative;
+  left: 70%;
+  top: -45px;
+}
+
 .scroll-info {
   float: right;
   width: 70%;

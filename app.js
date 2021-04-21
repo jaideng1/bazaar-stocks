@@ -2,7 +2,9 @@
 var server = require("./start-server")();
 
 const { app, BrowserWindow } = require('electron')
-const path = require('path')
+const path = require('path');
+//One day... it'll work...
+// const { setTimeout } = require('timers/promises');
 var apiHandler = require("./api-handler/api-handler.js");
 
 /*
