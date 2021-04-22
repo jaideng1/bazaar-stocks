@@ -17,7 +17,7 @@
     -->
 
     <script>
-      const IN_DEVELOPMENT = true;
+      const IN_DEVELOPMENT = true; // doesn't really matter rn
     </script>
   </head>
   <body>
@@ -98,7 +98,7 @@
               storage.push(data);
               storedFirstGeneralDiscussion = true;
             }
-
+            itemInfoElement.innerHTML = "";
             threadsElement.innerHTML = "";
 
             if (data.status !== 200) {

@@ -15,7 +15,7 @@ This program will only request data from [hypixel.net](https://hypixel.net), [ap
 
 # On Your Own
 
-Here's the guide + some other things
+Here's the guide + some other things if you want to make your own addons for this.
 
 ### Prerequisites
 

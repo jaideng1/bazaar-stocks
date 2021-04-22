@@ -11,7 +11,7 @@
     "postinstall": "install-app-deps",
     "start": "npm install && electron .",
     "pack": "./node_modules/.bin/electron-builder build --dir",
-    "dist": "./node_modules/.bin/electron-builder build"
+    "dist": "./node_modules/.bin/electron-builder build",
   },
   "build": {
     "productName": "Bazaar Stocks",
