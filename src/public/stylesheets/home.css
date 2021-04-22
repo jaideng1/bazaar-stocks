@@ -74,6 +74,11 @@ body > * {
   background-color: rgb(44, 41, 45);
 }
 
+.scroll-news-clicked {
+  background-color: rgb(67, 64, 68);
+  transition-duration: 0.2s;
+}
+
 .scroll-news p:not(.stock-desc, .mrkt-cap) {
   /*display: block;*/
   padding-left: 15px;
@@ -176,7 +181,7 @@ body > * {
   top: -45px;
 
   user-select: none;
-  
+
 }
 
 .scroll-info {

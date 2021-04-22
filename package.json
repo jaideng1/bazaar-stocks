@@ -1,25 +1,25 @@
 {
-   "name":"bazaar-stocks",
-   "version":"0.1.0",
-   "license":"ISC",
-   "description":"A bit of a copy of the Stocks app but it is for the Bazaar in Hypixel Skyblock.",
-   "author":"jaideng",
-   "main":"./src/app.js",
-   "homepage":"./",
-   "scripts":{
-      "test":"electron .",
-      "postinstall":"install-app-deps",
-      "start":"npm install && electron .",
-      "pack":"./node_modules/.bin/electron-builder build --dir",
-      "dist":"./node_modules/.bin/electron-builder build"
+   "name": "bazaar-stocks",
+   "version": "0.1.0",
+   "license": "ISC",
+   "description": "A bit of a copy of the Stocks app but it is for the Bazaar in Hypixel Skyblock.",
+   "author": "jaideng",
+   "main": "./src/app.js",
+   "homepage": "./",
+   "scripts": {
+      "test": "electron .",
+      "postinstall": "install-app-deps",
+      "start": "npm install && electron .",
+      "pack": "./node_modules/.bin/electron-builder build --dir",
+      "dist": "./node_modules/.bin/electron-builder build"
    },
-   "build":{
-      "productName":"Bazaar Stocks",
-      "appId":"bazaarstocks",
-      "directories":{
-         "buildResources":"build"
+   "build": {
+      "productName": "Bazaar Stocks",
+      "appId": "bazaarstocks",
+      "directories": {
+         "buildResources": "build"
       },
-      "files":[
+      "files": [
          "./build/**/*",
          "./src/app.js",
          "./node_modules/**/*",
@@ -27,41 +27,41 @@
          "./src/*",
          "./src/**/*"
       ],
-      "dmg":{
-         "contents":[
+      "dmg": {
+         "contents": [
             {
-               "x":110,
-               "y":150
+               "x": 110,
+               "y": 150
             },
             {
-               "x":240,
-               "y":150,
-               "type":"link",
-               "path":"/Applications"
+               "x": 240,
+               "y": 150,
+               "type": "link",
+               "path": "/Applications"
             }
          ]
       },
-      "linux":{
-         "target":[
+      "linux": {
+         "target": [
             "AppImage",
             "deb"
          ]
       },
-      "win":{
-         "target":"squirrel",
-         "icon":"build/icon.ico"
+      "win": {
+         "target": "squirrel",
+         "icon": "build/icon.ico"
       }
    },
-   "devDependencies":{
-      "electron":"^12.0.4",
-      "electron-builder":"^22.10.5"
+   "devDependencies": {
+      "electron": "^12.0.4",
+      "electron-builder": "^22.10.5"
    },
-   "dependencies":{
-      "axios":"^0.21.1",
-      "cheerio":"^1.0.0-rc.6",
-      "dotenv":"^8.2.0",
-      "express":"^4.17.1",
-      "os-utils":"^0.0.14",
-      "request":"^2.88.2"
+   "dependencies": {
+      "axios": "^0.21.1",
+      "cheerio": "^1.0.0-rc.6",
+      "dotenv": "^8.2.0",
+      "express": "^4.17.1",
+      "os-utils": "^0.0.14",
+      "request": "^2.88.2"
    }
 }

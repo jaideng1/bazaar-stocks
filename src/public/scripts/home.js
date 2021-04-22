@@ -33,6 +33,8 @@ function onRecieveKeys(beData) {
 
     divEle.onclick = () => { switchToInfo(key) }
 
+    divEle.id = key;
+
     stocksContainer.appendChild(divEle);
 
     let aEle = document.createElement("p");
@@ -94,6 +96,8 @@ var itemInfoElement = document.getElementById("item-info");
 
 var hoverOverModeButton = false;
 
+var lastClickedOn = "";
+
 function switchToInfo(key) {
   if (hoverOverModeButton) return;
 
@@ -106,6 +110,12 @@ function switchToInfo(key) {
     }
     return;
   }
+
+  if (lastClickedOn != "") document.getElementById(lastClickedOn).classList.remove("scroll-news-clicked"); //Non-active color
+
+  lastClickedOn = key;
+
+  document.getElementById(key).classList.add("scroll-news-clicked"); //Active color
 
   let product = products[key];
 
@@ -262,21 +272,27 @@ function limitToMaxPriceLength(str, len=MAX_PRICE_LENGTH) {
 function roundDown(n) {
   let logN = Math.floor(Math.log10(n));
   let symbol = "";
+  let away = 0;
   if (inBetween(logN, 3, 5)) {
     symbol = "k";
+    away = logN - 3;
   } else if (inBetween(logN, 6, 8)) {
     symbol = "m";
+    away = logN - 6;
   } else if (inBetween(logN, 9, 11)) {
     symbol = "b";
+    away = logN - 9;
   } else if (inBetween(logN, 12, 14)) {
     symbol = "t";
+    away = logN - 12;
   } else if (logN > 14) {
-    symbol = "q";
+    symbol = "q+";
+    away = logN - 14;
   }
 
   if (symbol != "") {
     let splitStrN = (n + "").split("");
-    return splitStrN[0] + "." + splitStrN[1] + splitStrN[2] + symbol;
+    return splitStrN[0] + ((away == 0) ? "." : "") + splitStrN[1] + ((away == 1) ? "." : "") + splitStrN[2] + symbol;
   }
 
   return n;
