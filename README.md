@@ -58,5 +58,6 @@ If you have all of the devDependencies and the normal dependencies installed, th
 
 If you've moved around files outside of src or something like that, then you'll have to reference it in `package.json` under `"files"`. You have to replace `./src/app.js` with wherever the starting script is, but you can follow the format of the other files.  
 
+
 In your shell, run `mkdir build && mkdir dist`.  
 To build the program, run `npm run dist`.
