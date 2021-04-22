@@ -6,6 +6,8 @@ A stocks application for the Bazaar in Hypixel SkyBlock.
 
 Look at the side bar at releases.  
 
+
+
 **Side Note:**  
 
 This program will only request data from [hypixel.net](https://hypixel.net), [api.hypixel.net](https://hypixel.net) and any links for forum avatars.
@@ -33,10 +35,9 @@ Finally, run `npm test` to run the program.
 
 Any JS scripts, CSS files, or other files for the app will be automatically hosted if they are in the right folder.
 
-Put JS scripts in `/public/scripts`
-Put CSS scripts in `/public/stylesheets`
-
-Put assets in `/assets`
+Put JS scripts in `/public/scripts`.  
+Put CSS scripts in `/public/stylesheets`.  
+Put assets in `/assets`.  
 
 It will not host any files starting with `.`
 
