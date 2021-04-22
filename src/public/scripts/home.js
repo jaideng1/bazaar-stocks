@@ -62,6 +62,12 @@ function onRecieveKeys(beData) {
     mrktCap.classList.add("mrkt-cap");
     mrktCap.id = "mrkt-cap-" + key.toLowerCase();
     mrktCap.onclick = switchMode;
+    mrktCap.onmouseover = () => {
+      hoverOverModeButton = true;
+    }
+    mrktCap.onmouseout = () => {
+      hoverOverModeButton = false;
+    }
     mrktCap.style = "background-color: " + ((products[key].quick_status.sellMovingWeek >= avgSMW) ? "#34eb46" : "#e03b22")
 
     divEle.appendChild(aEle)
@@ -84,10 +90,54 @@ function onRecieveKeys(beData) {
   }, 100)
 }
 
+var itemInfoElement = document.getElementById("item-info");
+
+var hoverOverModeButton = false;
+
 function switchToInfo(key) {
+  if (hoverOverModeButton) return;
+
+  if (key == "news") {
+    if (showingInfo) {
+      showingInfo = false;
+      document.getElementById("info-title").textContent = "Recent Threads";
+
+      getGeneralDiscussion();
+    }
+    return;
+  }
+
   let product = products[key];
 
+  showingInfo = true;
+  threadsElement.innerHTML = "";
+  itemInfoElement.innerHTML = "";
+
+  document.getElementById("info-title").textContent = getInitials(key.replaceAll("_", " "));
+
   let quickStatus = product.quick_status;
+
+  let divEle = document.createElement("div");
+
+  itemInfoElement.appendChild(divEle);
+
+  let infos = [
+    "Sell Price: " + commaNumber(Math.round(quickStatus.sellPrice)),
+    "Sell Moving Week: " + commaNumber(quickStatus.sellMovingWeek) + " (Average: " + commaNumber(Math.round(getAverageSellMovingWeek())) + ")",
+    "Sell Volume: " + commaNumber(quickStatus.sellVolume),
+    "Current Amount of Sell Orders: " + commaNumber(quickStatus.sellOrders),
+    "Buy Price: " + commaNumber(Math.round(quickStatus.buyPrice)),
+    "Buy Moving Week: " + commaNumber(quickStatus.buyMovingWeek),
+    "Buy Volume: " + commaNumber(quickStatus.buyVolume),
+    "Current Amount of Buy Orders: " + commaNumber(quickStatus.buyOrders)
+  ];
+
+  for (let info of infos) {
+    let pEle = document.createElement("p");
+    pEle.textContent = info;
+    divEle.appendChild(pEle);
+  }
+
 }
 
 function formatCanvas(canvas) {
@@ -113,7 +163,6 @@ function adjustHeight() {
 window.onresize = adjustHeight;
 
 adjustHeight();
-
 
 //formats string with a title lol
 function titleCase(str) {
@@ -236,4 +285,16 @@ function roundDown(n) {
 //in between numbers
 function inBetween(n, min, max) {
   return n >= min && n <= max;
+}
+
+function commaNumber(n) {
+  let splitN = (n + "").split("").reverse();
+  let finaln = [];
+  for (let i = 0; i < splitN.length; i++) {
+    finaln.unshift(splitN[i]);
+    if (i <= splitN.length - 2 && (i + 1) % 3 == 0 && i != 0) {
+      finaln.unshift(",");
+    }
+  }
+  return finaln.join("");
 }

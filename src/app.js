@@ -56,7 +56,7 @@ function createWindow () {
     titleBarStyle: 'hidden'
   })
 
-  win.loadFile('app-pages/index.html')
+  win.loadFile(__dirname + '/app-pages/index.html')
 
   win.once('ready-to-show', () => {
     //Just send the data again if it was already sent out.
