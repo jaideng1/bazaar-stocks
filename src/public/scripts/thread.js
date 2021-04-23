@@ -1,6 +1,13 @@
 
-
+/** Class representing a thread from hypixel.net. */
 class Thread {
+  /**
+    * Store the information.
+    * @param {string} title
+    * @param {string} avatarLink - Link to the avatar of the author.
+    * @param {string} [link=https://hypixel.net] - Link to the thread.
+    * @param {string} [author=] - Author's username.
+  */
   constructor(title, avatarLink, link="https://hypixel.net", author="") {
     this.title = title;
     this.avatarLink = avatarLink;
@@ -8,6 +15,11 @@ class Thread {
     this.link = link;
   }
 
+  /**
+    * Creates a div element with all of the necessary information.
+    * @param {boolean} rightSide - Whether the thread will be on the right side of the page.
+    * @returns {Object}
+  */
   getHTML(rightSide) {
     let divEle = document.createElement("div");
 

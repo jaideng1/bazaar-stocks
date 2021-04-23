@@ -5,7 +5,11 @@ var router = express.Router();
 
 var stylesheetsPath = path.join(__dirname, "../public/stylesheets")
 
-
+/**
+  * Loads in all of the files in the `/stylesheets` directory, then hosts them with Express.
+  * @param {function} resolve
+  * @param {function} reject
+*/
 function loadFiles(resolve, reject) {
   const files = fs.readdir(stylesheetsPath, (err, files) => {
     if (err) {

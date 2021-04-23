@@ -4,6 +4,10 @@ var formattedKeys = false;
 
 var stocksContainer = document.getElementById("stocks");
 
+/**
+  * Gets the average amount of buy orders went through (how many people were selling it).
+  * @returns {number}
+*/
 function getAverageSellMovingWeek() {
   let totalSMW = 0;
   let totalAmount = productKeys.length;
@@ -12,14 +16,17 @@ function getAverageSellMovingWeek() {
     if (item.quick_status.sellMovingWeek == 0) {
       totalAmount--;
     } else {
-      totalSMW += item.quick_status.sellMovingWeek;
+      totalSMW += item.quick_status.buyMovingWeek;
     }
   });
 
   return totalSMW / totalAmount;
 }
 
-//When the backend data shows up to the party
+/**
+ * Called from index.html for when it recieved the data from api.hypixel.net
+ * @param {Object} beData
+*/
 function onRecieveKeys(beData) {
   if (formattedKeys) return;
 
@@ -55,8 +62,9 @@ function onRecieveKeys(beData) {
 
     let quickStatus = products[key].quick_status;
 
-    priceEle.innerHTML = limitToMaxPriceLength(roundDown(Math.round(quickStatus.sellPrice)));
+    priceEle.innerHTML = limitToMaxPriceLength(roundDown(Math.round(quickStatus.buyPrice)));
     priceEle.classList.add("stock-price");
+    priceEle.title = "Sell Price: " + commaNumber(Math.round(quickStatus.buyPrice));
 
     let mrktCap = document.createElement("p");
 
@@ -98,6 +106,10 @@ var hoverOverModeButton = false;
 
 var lastClickedOn = "";
 
+/**
+ * Whenever someone clicks on a side bar div.
+ * @param {string} key
+*/
 function switchToInfo(key) {
   if (hoverOverModeButton) return;
 
@@ -131,15 +143,17 @@ function switchToInfo(key) {
 
   itemInfoElement.appendChild(divEle);
 
+  //Note: Buy and Sell are flipped around.
+  //Buy is how much you can sell it for, and sell is how much you can buy it for
   let infos = [
-    "Sell Price: " + commaNumber(Math.round(quickStatus.sellPrice)),
-    "Sell Moving Week: " + commaNumber(quickStatus.sellMovingWeek) + " (Average: " + commaNumber(Math.round(getAverageSellMovingWeek())) + ")",
-    "Sell Volume: " + commaNumber(quickStatus.sellVolume),
-    "Current Amount of Sell Orders: " + commaNumber(quickStatus.sellOrders),
-    "Buy Price: " + commaNumber(Math.round(quickStatus.buyPrice)),
-    "Buy Moving Week: " + commaNumber(quickStatus.buyMovingWeek),
-    "Buy Volume: " + commaNumber(quickStatus.buyVolume),
-    "Current Amount of Buy Orders: " + commaNumber(quickStatus.buyOrders)
+    "Buy Price (Instant Sell Price): " + commaNumber(Math.round(quickStatus.sellPrice)),
+    "Buy Moving Week: " + commaNumber(quickStatus.sellMovingWeek) + " (Average: " + commaNumber(Math.round(getAverageSellMovingWeek())) + ")",
+    "Buy Volume: " + commaNumber(quickStatus.sellVolume),
+    "Current Amount of Buy Orders: " + commaNumber(quickStatus.sellOrders),
+    "Sell Price (Instant Buy Price): " + commaNumber(Math.round(quickStatus.buyPrice)),
+    "Sell Moving Week: " + commaNumber(quickStatus.buyMovingWeek),
+    "Sell Volume: " + commaNumber(quickStatus.buyVolume),
+    "Current Amount of Sell Orders: " + commaNumber(quickStatus.buyOrders)
   ];
 
   for (let info of infos) {
@@ -150,6 +164,10 @@ function switchToInfo(key) {
 
 }
 
+/**
+  * Eventually if I use a canvas, this would be the function to draw on it.
+  * @param {Object} canvas
+*/
 function formatCanvas(canvas) {
   var ctx = canvas.getContext("2d");
   ctx.fillStyle = "#34eb46"; //For green
@@ -160,7 +178,9 @@ function formatCanvas(canvas) {
 var lastHeight = 800;
 var infoContainer = document.getElementById("info");
 
-//Height thingy
+/**
+  * Adjusts the height of the different elements on the page.
+*/
 function adjustHeight() {
   if (window.innerHeight != lastHeight) {
     lastHeight = window.innerHeight;
@@ -174,7 +194,11 @@ window.onresize = adjustHeight;
 
 adjustHeight();
 
-//formats string with a title lol
+/**
+  * Formats strings in title case.
+  * @param {string} str
+  * @returns {string}
+*/
 function titleCase(str) {
   let spltStr = str.split(" ");
 
@@ -186,7 +210,11 @@ function titleCase(str) {
   return spltStr.join(" ");
 }
 
-//gets the initials of something
+/**
+  * Gets the initials of a string.
+  * @param {string} str
+  * @returns {string}
+*/
 function getInitials(str) {
   let splitStr = str.split(" ");
   let newStr = [];
@@ -204,7 +232,9 @@ var mode = -1;
 //1: loop through, order amount * order price per unit, add up the sum - is this market cap? idk economics
 //2: Buy Volume
 
-//changes the cool color buttons and displays fancy numbers
+/**
+  * Whenever you click on the small bubbles on the side bar, it'll call this to switch the data around;
+*/
 function switchMode() {
   let infoEles = document.getElementsByClassName("mrkt-cap");
 
@@ -255,7 +285,12 @@ function switchMode() {
 const MAX_PRICE_LENGTH = 5; //How many characters it can be.
 const HTML_SPACE = "&nbsp;";
 
-//just adds in spacing to make stuff more even
+/**
+  * Adds in `&nbsp;`s to strings that are shorter than the specified length.
+  * @param {string} str
+  * @param {string} [len=MAX_PRICE_LENGTH]
+  * @returns {string}
+*/
 function limitToMaxPriceLength(str, len=MAX_PRICE_LENGTH) {
   if (str.length < len) {
     let splitStr = str.split("");
@@ -269,6 +304,11 @@ function limitToMaxPriceLength(str, len=MAX_PRICE_LENGTH) {
 
 //did you know that i randomly found that log had a good use when i was messing with a calculator
 //thank you past myself for messing with a calculator
+/**
+  * Adds in symbols to numbers (such as: k, m, b, ect.)
+  * @param {number} n
+  * @returns {string}
+*/
 function roundDown(n) {
   let logN = Math.floor(Math.log10(n));
   let symbol = "";
@@ -298,11 +338,22 @@ function roundDown(n) {
   return n;
 }
 
-//in between numbers
+/**
+  * Gets if the specified number is between/equals the min and/or max.
+  * @param {number} n
+  * @param {number} min
+  * @param {number} max
+  * @returns {boolean}
+*/
 function inBetween(n, min, max) {
   return n >= min && n <= max;
 }
 
+/**
+  * Puts commas in a number to make it easier to read.
+  * @param {number} n
+  * @returns {string}
+*/
 function commaNumber(n) {
   let splitN = (n + "").split("").reverse();
   let finaln = [];

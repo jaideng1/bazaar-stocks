@@ -3,7 +3,9 @@ const express = require("express");
 
 const PORT = process.env.PORT || 5555;
 
-
+/**
+  * Starts hosting a server with Express, then hosts all of the needed files.
+*/
 function startServer() {
   var app = express();
 

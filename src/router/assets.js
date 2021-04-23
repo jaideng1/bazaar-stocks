@@ -6,10 +6,15 @@ var router = express.Router();
 var imagesPath = path.join(__dirname, "../assets")
 
 
+/**
+  * Loads in all of the files in the `/assets` directory, then hosts them with Express.
+  * @param {function} resolve
+  * @param {function} reject
+*/
 function loadFiles(resolve, reject) {
   const files = fs.readdir(imagesPath, (err, files) => {
     if (err) {
-      reject(err)
+      reject(err);
       return;
     }
 

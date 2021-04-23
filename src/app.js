@@ -32,6 +32,10 @@ var bazaarHandler, auctionHandler, win;
 
 var sentBazaarData = false;
 
+/**
+  * Gets the BazaarHandler's data, then sends the data to the app window.
+  * @param {Object} bh
+*/
 apiHandler.bazaarHandler.then((bh) => {
   bazaarHandler = bh;
 
@@ -43,6 +47,9 @@ apiHandler.bazaarHandler.then((bh) => {
   sentBazaarData = true;
 });
 
+/**
+  * Creates the app window.
+*/
 function createWindow () {
   win = new BrowserWindow({
     width: 1000,

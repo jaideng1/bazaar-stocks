@@ -52,6 +52,11 @@
 
       var storedFirstBackendData = false;
 
+      /**
+        * When it recieves the backend data, format it.
+        * @param {Object} e
+        * @param {Object} dt - The data.
+      */
       ipcRenderer.on("data", (e, dt) => {
         backendData = dt;
         console.log("Recieved Keys.")
@@ -88,6 +93,9 @@
       //   triedSaving: false
       // }
 
+      /**
+        * Gets the HTML content from hypixel.net then formats it on the page.
+      */
       function getGeneralDiscussion() {
         //get the general discussion
         axios.get(generalDiscussion)
