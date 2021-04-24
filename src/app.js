@@ -74,6 +74,18 @@ function createWindow () {
           products: bazaarHandler.products
         });
       }, 100);
+
+      //Every 3 minutes, update
+      setInterval(() => {
+        bazaarHandler.getProductList((productList, bh) => {
+          if (win == null) return;
+          
+          win.webContents.send("dataupdate", {
+            productList: productList,
+            products: bh.products
+          });
+        });
+      }, 3 * 60 * 1000)
     }
   });
 

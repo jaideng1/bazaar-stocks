@@ -67,6 +67,12 @@
           storage.push(dt);
           storedFirstBackendData = true;
         }
+      });
+
+      ipcRenderer.on("dataupdate", (e, dt) => {
+        backendData = dt;
+        console.log("Recieved backend update.");
+        updateSideData(backendData);
       })
     </script>
     <script>
@@ -87,6 +93,8 @@
       var storage = [];
 
       var storedFirstGeneralDiscussion = false;
+
+      var itemInfoElement = document.getElementById("item-info");
 
       // var userData = {
       //   username: null,
