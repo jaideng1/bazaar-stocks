@@ -166,9 +166,11 @@ var lastClickedOn = "";
   * Creates a canvas with information based off of the order information.
   * @param {Array} buyOrdersInfo
   * @param {Array} sellOrdersInfo
+  * @param {Object} [mouseData=null]
+  * @param {Object} [orderDataElement=null]
   * @returns {Object}
 */
-function createCanvasWithOrdersInfo(BOI, SOI) {
+function createCanvasWithOrdersInfo(BOI, SOI, mouseData=null, orderDataElement=null) {
   //Copy it cause it references the main object
   let buyOrdersInfo = JSON.parse(JSON.stringify(BOI));
   let sellOrdersInfo = JSON.parse(JSON.stringify(SOI));
@@ -186,6 +188,32 @@ function createCanvasWithOrdersInfo(BOI, SOI) {
     return canvas;
   }
 
+  //Expand the buy orders
+  for (let buyOrder of buyOrdersInfo) {
+    if (buyOrder.orders > 1) {
+      for (let o = 1; o < buyOrder.orders; o++) {
+        buyOrdersInfo.push({
+          pricePerUnit: buyOrder.pricePerUnit,
+          amount: buyOrder.amount,
+          orders: 1,
+        });
+      }
+    }
+  }
+
+  //Expand the sell orders
+  for (let sellOrder of sellOrdersInfo) {
+    if (sellOrder.orders > 1) {
+      for (let o = 1; o < sellOrder.orders; o++) {
+        sellOrdersInfo.push({
+          pricePerUnit: sellOrder.pricePerUnit,
+          amount: sellOrder.amount,
+          orders: 1,
+        });
+      }
+    }
+  }
+
   let len = (buyOrdersInfo.length <= sellOrdersInfo.length) ? buyOrdersInfo.length : sellOrdersInfo.length;
   let widthPer = Math.floor(600 / len);
 
@@ -194,16 +222,17 @@ function createCanvasWithOrdersInfo(BOI, SOI) {
   ctx.fillStyle = "#616161";
 
   //Fill in horozontal lines
-  for (let l = 0; l < 600 / linePerPixels - 1; l++) {
+  for (let l = 0; l < (600 / linePerPixels) - 1; l++) {
     ctx.fillRect(0, (l + 1) * linePerPixels, 601, 3);
   }
 
-  var dividedBy = 2; //To space out the lines a bit
+  var dividedBy = 1; //To space out the lines a bit
 
   //Fill in vertical lines
-  for (let ys = 0; ys < Math.round(len / dividedBy); ys++) {
-    ctx.fillRect((ys + 1) * (widthPer * dividedBy), 0, 3, 601)
+  for (let ys = 0; ys < Math.round(len / dividedBy) + 1; ys++) {
+    ctx.fillRect((ys * dividedBy) * widthPer, 0, 3, 601)
   }
+
 
   ctx.fillStyle = "#34eb46";
 
@@ -241,6 +270,11 @@ function createCanvasWithOrdersInfo(BOI, SOI) {
   let highestPrice = (highestBuyOrder >= highestSellOrder) ? highestBuyOrder : highestSellOrder;
   let adjOrderP = highestPrice - lowestPrice;
 
+  let addlAmount = 1, newInfo = {
+    sell: [],
+    buy: []
+  };
+
   for (let i = 0; i < len; i++) {
     let thisYCord = 199 - (200 * ((buyOrdersInfo[i].pricePerUnit - lowestPrice) / adjOrderP)) + 50;
     let nextYCord = 199 - (200 * (((buyOrdersInfo[i + 1].pricePerUnit || buyOrdersInfo[i].pricePerUnit) - lowestPrice) / adjOrderP)) + 50;
@@ -254,10 +288,23 @@ function createCanvasWithOrdersInfo(BOI, SOI) {
       return ((nextYCord - thisYCord) * percentAcross) + thisYCord;
     }
 
-    for (let x = startX; x < finishX; x++) {
+    for (let x = startX; x < finishX + 1; x += addlAmount) {
       let yCord = f(x);
-      ctx.fillRect(x, yCord, 1, clamp(f(x + 1) - yCord, 3, 10000) + 1);
+      ctx.fillRect(x, yCord, 2, (x != startX) ? clamp(f(x - addlAmount) - yCord, 3, 10000) + 2 : clamp(f(x + addlAmount) - yCord, 3, 10000) + 2);
     }
+
+    newInfo.buy.push({
+      amount: buyOrdersInfo[i].amount,
+      pricePerUnit: buyOrdersInfo[i].pricePerUnit,
+      start: {
+        x: startX,
+        y: f(startX)
+      },
+      finish: {
+        x: finishX,
+        y: f(finishX)
+      }
+    });
   }
 
   for (let j = 0; j < len; j++) {
@@ -273,10 +320,59 @@ function createCanvasWithOrdersInfo(BOI, SOI) {
       return ((nextYCord - thisYCord) * percentAcross) + thisYCord;
     }
 
-    for (let x = startX; x < finishX; x++) {
-      let percentAcross = (x - startX) / (finishX - startX);
-      let yCord = ((nextYCord - thisYCord) * percentAcross) + thisYCord;
-      ctx.fillRect(x, yCord, 1, clamp(f(x + 1) - yCord, 3, 10000) + 1);
+    for (let x = startX; x < finishX + 1; x += addlAmount) {
+      let yCord = f(x);
+      ctx.fillRect(x, yCord, 2, (x != startX) ? clamp(f(x - addlAmount) - yCord, 3, 10000) + 2 : clamp(f(x + addlAmount) - yCord, 3, 10000) + 2);
+    }
+
+    newInfo.sell.push({
+      amount: sellOrdersInfo[j].amount,
+      pricePerUnit: sellOrdersInfo[j].pricePerUnit,
+      start: {
+        x: startX,
+        y: f(startX)
+      },
+      finish: {
+        x: finishX,
+        y: f(finishX)
+      }
+    });
+  }
+
+  if (mouseData != null) {
+    mouseData.x = clamp(mouseData.x, 0, 100000);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(mouseData.x, 0, 1, 301);
+    let indexOfOrder = -1;
+    for (let i = 0; i < newInfo.buy.length; i++) {
+      if (mouseData.x >= newInfo.buy[i].start.x && mouseData.x < newInfo.buy[i].finish.x) {
+        indexOfOrder = i;
+        break;
+      }
+    }
+    if (orderDataElement != null) {
+      if (indexOfOrder != -1) {
+        let pEle = (document.getElementById("order-chart-info") == null) ? document.createElement("p") : document.getElementById("order-chart-info");
+        if (document.getElementById("order-chart-info") == null) {
+          orderDataElement.appendChild(pEle);
+        }
+
+        pEle.innerHTML = "Buy Data:"
+        pEle.innerHTML += "<br/>Amount: " + commaNumber(newInfo.sell[indexOfOrder].amount);
+
+        let unitPriceFormatted = commaNumber((newInfo.sell[indexOfOrder].pricePerUnit + "").split(".")[0]) + (((newInfo.sell[indexOfOrder].pricePerUnit + "").split(".").length > 1) ? "." + (newInfo.sell[indexOfOrder].pricePerUnit + "").split(".")[1] : "")
+        pEle.innerHTML += "<br/>Unit Price: " + unitPriceFormatted;
+        pEle.id = "order-chart-info";
+      } else {
+        let pEle = (document.getElementById("order-chart-info") == null) ? document.createElement("p") : document.getElementById("order-chart-info");
+        if (document.getElementById("order-chart-info") == null) {
+          orderDataElement.appendChild(pEle);
+        }
+
+        pEle.textContent = "Data Not Found." + ((IN_DEVELOPMENT) ? "mX: " + mouseData.x + ", mY: " + mouseData.y : "")
+        pEle.id = "order-chart-info";
+      }
     }
   }
 
@@ -289,8 +385,9 @@ function createCanvasWithOrdersInfo(BOI, SOI) {
 /**
  * Whenever someone clicks on a side bar div.
  * @param {string} key
+ * @param {Object} mouseMoveInfo
 */
-function switchToInfo(key) {
+function switchToInfo(key, mouseMoveInfo=null) {
   if (hoverOverModeButton) return;
 
   if (key == "news") {
@@ -342,10 +439,33 @@ function switchToInfo(key) {
     divEle.appendChild(pEle);
   }
 
-  let canvas = createCanvasWithOrdersInfo(product.buy_summary, product.sell_summary);
+  let canvas = createCanvasWithOrdersInfo(product.buy_summary, product.sell_summary, mouseMoveInfo, itemInfoElement);
+
+  canvas.id = "info-canvas";
+  canvas.addEventListener('mousemove', e => {
+    onMouseMove(e);
+  });
+  canvas.addEventListener('mouseout', e => {
+    onMouseMoveOff();
+  });
 
   itemInfoElement.appendChild(canvas);
 
+}
+
+function onMouseMove(evt) {
+  if (itemInfoElement.innerHTML != "") {
+    let mousePos = getMousePos(document.getElementById("info-canvas"), evt);
+    itemInfoElement.innerHTML = "";
+    switchToInfo(lastClickedOn, mousePos);
+  }
+}
+
+function onMouseMoveOff() {
+  if (itemInfoElement.innerHTML != "") {
+    itemInfoElement.innerHTML = "";
+    switchToInfo(lastClickedOn, null);
+  }
 }
 
 /**
@@ -550,6 +670,13 @@ function commaNumber(n) {
   return finaln.join("");
 }
 
+/**
+  * Clamps the number
+  * @param {number} n
+  * @param {number} min
+  * @param {number} max
+  * @returns {number}
+*/
 function clamp(n, min, max) {
   if (n < min) {
     return min;
@@ -558,4 +685,19 @@ function clamp(n, min, max) {
     return max;
   }
   return n;
+}
+
+/**
+  * Gets the mouse position on a canvas
+  * Source: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+  * @param {Object} canvas
+  * @param {Object} evt
+  * @returns {Object}
+*/
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
 }

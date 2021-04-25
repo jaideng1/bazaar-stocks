@@ -2,6 +2,8 @@
 
 A stocks application for the Bazaar in Hypixel SkyBlock.
 
+
+
 ### Downloading
 
 Look [here](https://github.com/jaideng1/bazaar-stocks/releases/) for releases.
