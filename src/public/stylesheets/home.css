@@ -9,7 +9,6 @@ but it's fine if it works lol
 - jaideng
 */
 
-
 html, body {
   height: 100%;
   display: flex;
@@ -26,6 +25,8 @@ body {
 body > * {
   flex-shrink: 0;
 }
+
+/* Header */
 
 .top-bar {
   height: 49px;
@@ -59,6 +60,8 @@ body > * {
   border-style: none;
   color: rgb(72, 68, 72);
 }
+
+/* Side info stuff */
 
 .scroll-news {
   overflow-x: hidden;
@@ -195,6 +198,8 @@ body > * {
   font-size: 15px;
 }
 
+/* Threads */
+
 .news-thread {
   width: 40%;
   margin-left: 20px;
@@ -247,4 +252,28 @@ This doesn't work lmao
 
 #threads {
   margin-top: -10px;
+}
+
+/* Stock info stuff */
+
+#order-chart-info {
+  border-radius: 5px;
+  background-color: #a3a3a3;
+  /* margin-left: 10%; */
+
+  padding-left: 10px;
+  padding-right: 10px;
+
+  max-width: 30%;
+}
+
+#order-chart-info-2 {
+  border-radius: 5px;
+  background-color: #a3a3a3;
+  margin-right: 10%;
+
+  padding-left: 10px;
+  padding-right: 10px;
+
+  max-width: 30%;
 }

@@ -226,12 +226,13 @@ function createCanvasWithOrdersInfo(BOI, SOI, mouseData=null, orderDataElement=n
     ctx.fillRect(0, (l + 1) * linePerPixels, 601, 3);
   }
 
-  var dividedBy = 1; //To space out the lines a bit
-
-  //Fill in vertical lines
-  for (let ys = 0; ys < Math.round(len / dividedBy) + 1; ys++) {
-    ctx.fillRect((ys * dividedBy) * widthPer, 0, 3, 601)
-  }
+  //TODO: Make tics to seperate each order
+  // var dividedBy = 1; //To space out the lines a bit
+  //
+  // //Fill in vertical lines
+  // for (let ys = 0; ys < Math.round(len / dividedBy) + 1; ys++) {
+  //   ctx.fillRect((ys * dividedBy) * widthPer, 0, 3, 601)
+  // }
 
 
   ctx.fillStyle = "#34eb46";
@@ -303,7 +304,8 @@ function createCanvasWithOrdersInfo(BOI, SOI, mouseData=null, orderDataElement=n
       finish: {
         x: finishX,
         y: f(finishX)
-      }
+      },
+      f,
     });
   }
 
@@ -335,11 +337,12 @@ function createCanvasWithOrdersInfo(BOI, SOI, mouseData=null, orderDataElement=n
       finish: {
         x: finishX,
         y: f(finishX)
-      }
+      },
+      f,
     });
   }
 
-  if (mouseData != null) {
+  if (mouseData != null && mouseData["y"] > 0 && mouseData["y"] < canvas.height) {
     mouseData.x = clamp(mouseData.x, 0, 100000);
 
     ctx.fillStyle = "#ffffff";
@@ -351,27 +354,51 @@ function createCanvasWithOrdersInfo(BOI, SOI, mouseData=null, orderDataElement=n
         break;
       }
     }
+    let sideLen = 10;
+    ctx.fillStyle = "#d0db35";
+    ctx.fillRect(mouseData.x - (sideLen / 2), newInfo.buy[indexOfOrder].f(mouseData.x) - (sideLen / 2) + 2, sideLen, sideLen)
+    ctx.fillStyle = "#00c7c0";
+    ctx.fillRect(mouseData.x - (sideLen / 2), newInfo.sell[indexOfOrder].f(mouseData.x) - (sideLen / 2) + 2, sideLen, sideLen)
+
     if (orderDataElement != null) {
       if (indexOfOrder != -1) {
         let pEle = (document.getElementById("order-chart-info") == null) ? document.createElement("p") : document.getElementById("order-chart-info");
+        let pEle2 = (document.getElementById("order-chart-info-2") == null) ? document.createElement("p") : document.getElementById("order-chart-info-2");
         if (document.getElementById("order-chart-info") == null) {
           orderDataElement.appendChild(pEle);
+          orderDataElement.appendChild(pEle2);
         }
 
-        pEle.innerHTML = "Buy Data:"
-        pEle.innerHTML += "<br/>Amount: " + commaNumber(newInfo.sell[indexOfOrder].amount);
+        //Set data on doc
+
+        pEle.innerHTML = "<span style=\"color: #00c7c0;\">Buy Data:</span>"
 
         let unitPriceFormatted = commaNumber((newInfo.sell[indexOfOrder].pricePerUnit + "").split(".")[0]) + (((newInfo.sell[indexOfOrder].pricePerUnit + "").split(".").length > 1) ? "." + (newInfo.sell[indexOfOrder].pricePerUnit + "").split(".")[1] : "")
         pEle.innerHTML += "<br/>Unit Price: " + unitPriceFormatted;
+        pEle.innerHTML += "<br/>Amount: " + commaNumber(newInfo.sell[indexOfOrder].amount);
+
         pEle.id = "order-chart-info";
+
+        pEle2.innerHTML = "<span style=\"color: #d0db35\">Sell Data:</span>"
+
+        unitPriceFormatted = commaNumber((newInfo.buy[indexOfOrder].pricePerUnit + "").split(".")[0]) + (((newInfo.buy[indexOfOrder].pricePerUnit + "").split(".").length > 1) ? "." + (newInfo.buy[indexOfOrder].pricePerUnit + "").split(".")[1] : "");
+        pEle2.innerHTML += "<br/>Unit Price: " + unitPriceFormatted;
+        pEle2.innerHTML += "<br/>Amount: " + commaNumber(newInfo.buy[indexOfOrder].amount);
+
+        pEle2.id = "order-chart-info-2";
       } else {
         let pEle = (document.getElementById("order-chart-info") == null) ? document.createElement("p") : document.getElementById("order-chart-info");
+        let pEle2 = (document.getElementById("order-chart-info") == null) ? document.createElement("p") : document.getElementById("order-chart-info-2");
         if (document.getElementById("order-chart-info") == null) {
           orderDataElement.appendChild(pEle);
+          orderDataElement.appendChild(pEle2);
         }
 
         pEle.textContent = "Data Not Found." + ((IN_DEVELOPMENT) ? "mX: " + mouseData.x + ", mY: " + mouseData.y : "")
         pEle.id = "order-chart-info";
+
+        pEle2.innerHTML = "";
+        pEle2.id = "order-chart-info-2";
       }
     }
   }
@@ -424,7 +451,7 @@ function switchToInfo(key, mouseMoveInfo=null) {
   //Buy is how much you can sell it for, and sell is how much you can buy it for
   let infos = [
     "Buy Price (Instant Sell Price): " + commaNumber(Math.round(quickStatus.sellPrice)),
-    "Buy Moving Week: " + commaNumber(quickStatus.sellMovingWeek) + " (Average: " + commaNumber(Math.round(getAverageSellMovingWeek())) + ")",
+    "Buy Moving Week: <span style=\"color: " + ((getAverageSellMovingWeek() < quickStatus.sellMovingWeek) ? "#34eb46" : "#e03b22") + "\">" + commaNumber(quickStatus.sellMovingWeek) + "</span> (Average: " + commaNumber(Math.round(getAverageSellMovingWeek())) + ")",
     "Buy Volume: " + commaNumber(quickStatus.sellVolume),
     "Current Amount of Buy Orders: " + commaNumber(quickStatus.sellOrders),
     "Sell Price (Instant Buy Price): " + commaNumber(Math.round(quickStatus.buyPrice)),
@@ -433,9 +460,10 @@ function switchToInfo(key, mouseMoveInfo=null) {
     "Current Amount of Sell Orders: " + commaNumber(quickStatus.buyOrders)
   ];
 
+
   for (let info of infos) {
     let pEle = document.createElement("p");
-    pEle.textContent = info;
+    pEle.innerHTML = info;
     divEle.appendChild(pEle);
   }
 
