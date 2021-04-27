@@ -63,5 +63,10 @@ If you've moved around files outside of src or something like that, then you'll 
 
 In your shell, run `mkdir build && mkdir dist`.
 Move the files in `saved-icons` to the `build` folder.
-To build the program, run `npm run dist` for your current platform (? I think), but to build for Mac, Windows and Linux, run:   
-`npm run dist-all-platforms`.
+To build the program for your current platform (? I think), run:  
+`npm run dist`
+
+To build for Mac, Windows and Linux, run:   
+`npm run dist-all-platforms`  
+
+(Be careful about building, it can use up a lot of storage!)
