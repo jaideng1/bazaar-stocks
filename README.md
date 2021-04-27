@@ -62,4 +62,4 @@ If you've moved around files outside of src or something like that, then you'll 
 
 
 In your shell, run `mkdir build && mkdir dist`.  
-To build the program, run `npm run dist`.
+To build the program, run `npm run dist` for your current platform (? I think), but to build for Mac, Windows and Linux, run `npm run dist-all-platforms`.
