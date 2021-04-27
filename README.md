@@ -61,5 +61,6 @@ If you have all of the devDependencies and the normal dependencies installed, th
 If you've moved around files outside of src or something like that, then you'll have to reference it in `package.json` under `"files"`. You have to replace `./src/app.js` with wherever the starting script is, but you can follow the format of the other files.  
 
 
-In your shell, run `mkdir build && mkdir dist`.  
+In your shell, run `mkdir build && mkdir dist`.
+Move the files in `saved-icons` to the `build` folder.
 To build the program, run `npm run dist` for your current platform (? I think), but to build for Mac, Windows and Linux, run `npm run dist-all-platforms`.
