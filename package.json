@@ -4,6 +4,10 @@
    "license": "ISC",
    "description": "A bit of a copy of the Stocks app but it is for the Bazaar in Hypixel Skyblock.",
    "author": "jaideng",
+   "bugs": {
+     "url": "https://github.com/jaideng1/bazaar-stocks/issues",
+     "email": "jaidng1@gmail.com"
+   },
    "main": "./src/app.js",
    "homepage": "./",
    "scripts": {

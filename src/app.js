@@ -59,7 +59,7 @@ function createWindow () {
       enableRemoteModule: true,
       contextIsolation: false,
     }, // TODO: Maybe preload?
-    frame: false,
+    frame: (process.platform === "darwin"),
     titleBarStyle: 'hidden'
   })
 
@@ -79,7 +79,7 @@ function createWindow () {
       setInterval(() => {
         bazaarHandler.getProductList((productList, bh) => {
           if (win == null) return;
-          
+
           win.webContents.send("dataupdate", {
             productList: productList,
             products: bh.products
@@ -88,7 +88,6 @@ function createWindow () {
       }, 3 * 60 * 1000)
     }
   });
-
 
 }
 
