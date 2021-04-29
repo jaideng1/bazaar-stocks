@@ -432,6 +432,8 @@ function createCanvasWithOrdersInfo(BOI, SOI, mouseData=null, orderDataElement=n
   };
 }
 
+//var credObj = document.getElementById("credits");
+
 /**
  * Whenever someone clicks on a side bar div.
  * @param {string} key
@@ -444,6 +446,8 @@ function switchToInfo(key, mouseMoveInfo=null) {
     if (showingInfo) {
       showingInfo = false;
       document.getElementById("info-title").textContent = "Recent Threads";
+
+      //credObj.style = "opacity: 0;";
 
       for (let ele of document.getElementsByClassName("scroll-news-clicked")) {
         ele.classList.remove("scroll-news-clicked");
@@ -472,6 +476,7 @@ function switchToInfo(key, mouseMoveInfo=null) {
 
   let divEle = document.createElement("div");
 
+  //credObj.style = "opacity: 1;"
 
   //Note: Buy and Sell are flipped around.
   //Buy is how much you can sell it for, and sell is how much you can buy it for

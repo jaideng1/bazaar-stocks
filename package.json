@@ -16,7 +16,8 @@
       "start": "npm install && electron .",
       "pack": "./node_modules/.bin/electron-builder build --dir",
       "dist": "./node_modules/.bin/electron-builder build",
-      "dist-all-platforms": "./node_modules/.bin/electron-builder build -mwl"
+      "dist-all-platforms": "./node_modules/.bin/electron-builder build -mwl",
+      "dist-mw": "./node_modules/.bin/electron-builder build -mw"
    },
    "build": {
       "productName": "Bazaar Stocks",
@@ -54,7 +55,7 @@
       },
       "win": {
          "target": "squirrel",
-         "icon": "build/icon.ico"
+         "icon": "./build/icon.ico"
       }
    },
    "devDependencies": {

@@ -1,10 +1,15 @@
+/*
+* Bazaar Stocks
+* Made by jaideng1
+* Link: https://github.com/jaideng1/bazaar-stocks
+*/
+
+
 //Server is for Scripts and Stylesheets so I can use src="/scripts" or src="/stylesheets"
 var server = require("./start-server")();
 
 const { app, BrowserWindow } = require('electron')
 const path = require('path');
-//One day... it'll work...
-// const { setTimeout } = require('timers/promises');
 var apiHandler = require("./api-handler/api-handler.js");
 
 /*
@@ -51,17 +56,33 @@ apiHandler.bazaarHandler.then((bh) => {
   * Creates the app window.
 */
 function createWindow () {
-  win = new BrowserWindow({
-    width: 1000,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-      contextIsolation: false,
-    }, // TODO: Maybe preload?
-    frame: (process.platform === "darwin"),
-    titleBarStyle: 'hidden'
-  })
+  let options = {}; // TODO: Maybe preload?
+  if (process.platform == "darwin") { //MacOS works with the frame disabled.
+    options = {
+      width: 1000,
+      height: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        enableRemoteModule: true,
+        contextIsolation: false,
+      },
+      frame: false,
+      titleBarStyle: 'hidden'
+    };
+  } else {
+    options = {
+      width: 1000,
+      height: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        enableRemoteModule: true,
+        contextIsolation: false,
+      },
+      frame: true //For now, it's a bit weird on other systems, so it's easier if it's enabled.
+    };
+  }
+
+  win = new BrowserWindow(options);
 
   win.loadFile(__dirname + '/app-pages/index.html')
 
