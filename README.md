@@ -70,3 +70,5 @@ To build for Mac, Windows and Linux, run:
 `npm run dist-all-platforms`  
 
 (Be careful about building, it can use up a lot of storage!)
+
+  
