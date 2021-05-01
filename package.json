@@ -1,6 +1,6 @@
 {
    "name": "bazaar-stocks",
-   "version": "0.3.0",
+   "version": "0.2.0",
    "license": "ISC",
    "description": "A bit of a copy of the Stocks app but it is for the Bazaar in Hypixel Skyblock.",
    "author": "jaideng",
@@ -18,6 +18,8 @@
       "dist": "./node_modules/.bin/electron-builder build",
       "dist-all-platforms": "./node_modules/.bin/electron-builder build -mwl",
       "dist-mw": "./node_modules/.bin/electron-builder build -mw",
+      "dist-ml": "./node_modules/.bin/electron-builder build -ml",
+      "dist-wl": "./node_modules/.bin/electron-builder build -wl",
       "update-info": "node updateInfo.js"
    },
    "build": {

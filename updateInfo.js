@@ -3,6 +3,9 @@ const path = require("path");
 const colors = require("colors");
 const fs = require("fs");
 
+/**
+  * Removes warnings till the next update.
+*/
 function main() {
   getCurrentCommits().then((n) => {
     getCurrentVersion().then((v) => {

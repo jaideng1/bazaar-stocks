@@ -9,6 +9,7 @@ const GITHUB_LINKS = {
 
 /**
   * Gets the current number of commits from the GitHub page.
+  * @returns {Promise}
 */
 function getCurrentCommits() {
   return new Promise((resolve, reject) => {
@@ -50,6 +51,7 @@ function getCurrentCommits() {
 
 /**
   * Gets the current version from the GitHub page.
+  * @returns {Promise}
 */
 function getCurrentVersion() {
   return new Promise((resolve, reject) => {

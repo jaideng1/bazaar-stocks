@@ -4,6 +4,7 @@
 * Link: https://github.com/jaideng1/bazaar-stocks
 */
 
+//TODO: change the data.json file to be stored in another location instead of the local one.
 
 //Server is for Scripts and Stylesheets so I can use src="/scripts" or src="/stylesheets"
 var server = require("./start-server")();
@@ -24,6 +25,83 @@ var IN_DEVELOPMENT = false;
 inDevelopment().then((bool) => {
   IN_DEVELOPMENT = bool;
 });
+
+var APPLICATION_DATA_PATH = process.env.APPDATA || "NOT_STORED_IN_ENV";
+
+//Could've done a one-liner, but it's easier to see like this.
+if (APPLICATION_DATA_PATH == "NOT_STORED_IN_ENV") {
+  if (process.platform == "darwin") {
+    //IK it should prob be different, but yeah
+    APPLICATION_DATA_PATH = path.join(process.env.HOME, "/Library");
+  } else if (process.platform == "win32") {
+    //This is a bit unnecessary, but just in case ¯\_(ツ)_/¯
+    APPLICATION_DATA_PATH = path.join(process.env.HOME, "/AppData/Roaming");
+  } else if (process.platform == "linux") {
+    APPLICATION_DATA_PATH = path.join(process.env.HOME, "/.local/share");
+  } else {
+    APPLICATION_DATA_PATH = process.env.HOME;
+  }
+}
+
+console.log("Application Data path set as: " + APPLICATION_DATA_PATH)
+
+/**
+  * Creates the bazaar-stocks-data folder if it's not created yet in the app data folder.
+*/
+function checkAndCreateApplicationDataFolder() {
+  let folderPath = path.join(APPLICATION_DATA_PATH, "bazaar-stocks-data");
+
+  fs.access(folderPath, (err) => {
+    if (err) { //File Doesn't Exist
+      console.log("Application data folder for this program doesn't exist, creating it.");
+      fs.mkdir(folderPath, { recursive: true }, (err) => {
+        if (err) {
+          throw err;
+        }
+
+        createDataFile(folderPath);
+      })
+      return;
+    }
+    console.log("Application data folder for this program exists. Setting the data path to refer to it.");
+    createDataFile(folderPath)
+  });
+}
+
+var pathToDataFile = path.join(__dirname, "data.json");
+
+/**
+  * Creates the data.json in the app data folder.
+*/
+function createDataFile(folderPath) {
+  let json_path = path.join(folderPath, "data.json");
+  fs.access(json_path, (err) => {
+    if (err) {
+      console.log(colors.red("data.json doesn't exist - creating it."))
+
+      fs.readFile(path.join(__dirname, "data.json"), (err, data) => {
+        if (err) throw err;
+
+        fs.writeFile(json_path, data, (err) => {
+          if (err) throw err;
+
+          console.log(colors.green("✓ Finished writing to " + json_path));
+
+          pathToDataFile = json_path;
+        })
+      })
+
+      return;
+    }
+
+    console.log(colors.green("✓ data.json exists."))
+    console.log("Path: " + json_path)
+
+    pathToDataFile = json_path;
+  });
+}
+
+if (IN_DEVELOPMENT) checkAndCreateApplicationDataFolder();
 
 /*
 Any JS scripts, CSS files, or assets for the app will be automatically hosted if they are in the right location.
@@ -154,7 +232,7 @@ ipcMain.on("no-show-update", (e, dt) => {
   if (dt) {
     console.log("Not going to show update info for " + repoData.current.version + " until there is a new version.")
 
-    let dataPath = path.join(__dirname, "data.json")
+    let dataPath = pathToDataFile;
     fs.readFile(dataPath, (err, dt) => {
       if (err) throw err;
 
@@ -208,7 +286,7 @@ function inDevelopment() {
   * Gets all of my (jaideng1's) repos and gets *this* repo data.
 */
 async function loadInStoredData() {
-  fs.readFile(path.join(__dirname, "data.json"), (err, data) => {
+  fs.readFile(pathToDataFile, (err, data) => {
     if (err) throw err;
 
     data = JSON.parse(data);
@@ -254,7 +332,7 @@ var displayUpdateWindow = true;
   * Stores the latest seen version/commits
 */
 function storeLatestSeenData() {
-  let dataPath = path.join(__dirname, "data.json")
+  let dataPath = pathToDataFile;
   fs.readFile(dataPath, (err, dt) => {
     if (err) throw err;
 
@@ -276,7 +354,7 @@ function storeLatestSeenData() {
 */
 function checkUpdates() {
   let differentLastSeenData = false;
-  let dataFile = path.join(__dirname, "data.json");
+  let dataFile = pathToDataFile;
 
   if (repoData.stored.version == "v0" || repoData.stored.commits == -1) {
     //This means that it's a new version of the app, so you can just skip the bottom process.
@@ -300,7 +378,7 @@ function checkUpdates() {
     differentLastSeenData = true;
   }
 
-  if (IN_DEVELOPMENT) { //
+  if (IN_DEVELOPMENT) {
     if (repoData.current.commits > repoData.stored.commits) {
       console.log(colors.yellow("⚠ Warning: There have been new commits made to the GitHub page."))
       console.log(colors.yellow("This bazaar-stocks fork only has " + repoData.stored.commits + " commits, and the GitHub page has " + repoData.current.commits + " commits."))

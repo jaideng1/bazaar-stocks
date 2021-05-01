@@ -89,4 +89,4 @@ There might be warnings about this GitHub page that popup while making the progr
 This bazaar-stocks fork only has 35 commits, and the GitHub page has 36 commits.`  
 
 They just mean that there is new content here, in this repository, and you might want to check it out.  
-To get rid of them, run `npm run update-info`.
+To get rid of the warnings, run `npm run update-info`.
