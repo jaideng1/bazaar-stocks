@@ -5,8 +5,8 @@
    "description": "A bit of a copy of the Stocks app but it is for the Bazaar in Hypixel Skyblock.",
    "author": "jaideng",
    "bugs": {
-     "url": "https://github.com/jaideng1/bazaar-stocks/issues",
-     "email": "jaidng1@gmail.com"
+      "url": "https://github.com/jaideng1/bazaar-stocks/issues",
+      "email": "jaidng1@gmail.com"
    },
    "main": "./src/app.js",
    "homepage": "./",
@@ -17,7 +17,8 @@
       "pack": "./node_modules/.bin/electron-builder build --dir",
       "dist": "./node_modules/.bin/electron-builder build",
       "dist-all-platforms": "./node_modules/.bin/electron-builder build -mwl",
-      "dist-mw": "./node_modules/.bin/electron-builder build -mw"
+      "dist-mw": "./node_modules/.bin/electron-builder build -mw",
+      "update-info": "node updateInfo.js"
    },
    "build": {
       "productName": "Bazaar Stocks",
@@ -65,6 +66,7 @@
    "dependencies": {
       "axios": "^0.21.1",
       "cheerio": "^1.0.0-rc.6",
+      "colors": "^1.0.3",
       "dotenv": "^8.2.0",
       "electron-builder-squirrel-windows": "^22.10.5",
       "express": "^4.17.1",

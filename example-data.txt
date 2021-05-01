@@ -1,0 +1,7 @@
+{
+  "last_commits": -1,
+  "last_version": "v0",
+  "latest_seen_commits": -1,
+  "latest_seen_version": "v0",
+  "showAgain": false
+}

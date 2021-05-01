@@ -28,7 +28,7 @@ Install [Node.js](https://nodejs.org/), and [download](https://github.com/jaiden
 Open CMD/Terminal or what ever shell you use into this folder.
 
 Run `npm install`, then run `sudo npm install electron -g`.  
-After, run `cd src && cat example-env.txt >> .env` to create the `.env` file.
+After, run `cat example-env.txt >> .env && mv example-data.txt src/data.json` to create the `.env` and `data.json` files.
 
 Put your Hypixel API key in `.env`. (You can get it with `/api new` on Hypixel)  
 Finally, run `npm test` to run the program.
@@ -71,4 +71,7 @@ To build for Mac, Windows and Linux, run:
 
 (Be careful about building, it can use up a lot of storage!)
 
-  
+### Warnings
+
+There might be warnings about this GitHub page that popup while making the program. They just mean that there is new content here, and you might want to check it out.
+To get rid of them, run `npm run update-info`.

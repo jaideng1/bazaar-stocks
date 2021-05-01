@@ -3,3 +3,5 @@
 .DS_Store
 /dist
 /build
+# data.json is removed cause it's personalized - that's why you rename example-data.txt to data.json.
+src/data.json
