@@ -19,7 +19,7 @@ Here's the guide + some other things if you want to make your own addons for thi
 
 ### Prerequisites
 
-Install [Node.js](https://nodejs.org/), and [download](https://github.com/jaideng1/bazaar-stocks/archive/refs/heads/main.zip) this repository.
+Install [Node.js](https://nodejs.org/), and [download](https://github.com/jaideng1/bazaar-stocks/archive/refs/heads/main.zip) this repository.  
 (Or run `git clone https://github.com/jaideng1/bazaar-stocks`)
 
 ### Running The Program
