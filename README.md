@@ -32,8 +32,9 @@ Open CMD/Terminal or what ever shell you use into this folder.
 2nd:  
 `sudo npm install electron -g`  
 
-3rd:
-`cat example-env.txt >> .env && mv example-data.txt src/data.json` (to create the `.env` and `data.json` files).
+3rd:  
+`cat example-env.txt >> .env && mv example-data.txt src/data.json`  
+(To create the `.env` and `data.json` files).
 
 Put your Hypixel API key in `.env`. (You can get it with `/api new` on Hypixel)  
 *Note: It's not used right now, so you could just put some random letters in (for now.)*   
@@ -65,7 +66,7 @@ This was a bit tricky for myself to do (i might have started at 6:00pm and finis
 
 If you have all of the devDependencies and the normal dependencies installed, then you're pretty much fine.
 
-If you've moved around files outside of src or something like that, then you'll have to reference it in `package.json` under `"files"`. You have to replace `./src/app.js` with wherever the starting script is, but you can follow the format of the other files.  
+If you've moved around files outside of `src` that you want in your app or something like that, then you'll have to reference it in `package.json` under `"files"`. You have to replace `./src/app.js` with wherever the starting script is, but you can follow the format of the other files.  
 
 
 In your shell, run `mkdir build && mkdir dist`.
@@ -76,9 +77,16 @@ To build the program for your current platform (? I think), run:
 To build for Mac, Windows and Linux, run:   
 `npm run dist-all-platforms`  
 
+For only Mac and Windows, run:
+`npm run dist-mw`  
+
 (Be careful about building, it can use up a lot of storage!)
 
 ### Warnings
 
-There might be warnings about this GitHub page that popup while making the program. They just mean that there is new content here, and you might want to check it out.
+There might be warnings about this GitHub page that popup while making the program. They look a bit like this:  
+`⚠ Warning: There have been new commits made to the GitHub page.  
+This bazaar-stocks fork only has 35 commits, and the GitHub page has 36 commits.`  
+
+They just mean that there is new content here, in this repository, and you might want to check it out.  
 To get rid of them, run `npm run update-info`.
